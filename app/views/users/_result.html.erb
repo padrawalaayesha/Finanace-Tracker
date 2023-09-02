@@ -7,6 +7,17 @@
         <strong>Symbol: </strong><%=@stock.ticker%>
         <strong>Name: </strong><%=@stock.name%>
         <strong>Price: </strong><%=@stock.last_price%>
-        <%=link_to 'Add to Portfolio', user_stocks_path(user:current_user, stock:@stock.ticker), class:"btn tbn-xs btn-success",method: :post%>
+        <%if current_user.can_track_stocks?(@stock.ticker)%>
+          <%=link_to 'Add to Portfolio' , user_stocks_path(user: current_user, ticker:@stock.ticker), class:"btn btn-xs btn-success", method: :post%>
+        <%else%>
+           <span class="badge bg-secondary">
+              You are already tracking
+              <%if !current_user.under_stock_limit?%>
+                10 socks
+              <%else%>
+                this stock
+              <%end%>
+           </span>
+        <%end%>  
     </div>
 <%end%>
